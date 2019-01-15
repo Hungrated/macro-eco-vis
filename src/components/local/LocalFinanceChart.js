@@ -9,6 +9,8 @@ const FinanceComparisonChart = ({data}) => {
 
   const citiesExpenseData = data.expenseFinance || {};
 
+  const citiesFinanceData = data.citiesFinance || {};
+
   const getOption = () => {
 
     const years = [
@@ -110,9 +112,26 @@ const FinanceComparisonChart = ({data}) => {
       });
     });
 
+    cities.forEach(function (item) {
+      yAxisDetailedDataArr.push({
+        name: item + '-总预算',
+        type: 'bar',
+        symbol: 'none',
+        itemStyle: {
+          normal: {
+            color: 'rgb(' + Math.round(Math.random() * 255) +
+              ',' + Math.round(Math.random() * 255) +
+              ',' + Math.round(Math.random() * 255) +
+              ')'
+          }
+        },
+        data: Object.values(citiesFinanceData[item] || {})
+      });
+    });
+
     return {
       title: {
-        text: '2000年至2017年浙江省部分城市财政预算收入与支出趋势及比较（亿元）',
+        text: '2000年至2017年宁波各区县市财政趋势及比较（亿元）',
         subtext: '虚线代表预算收入 实线代表预算支出',
         left: 'center',
         top: 10
@@ -127,22 +146,22 @@ const FinanceComparisonChart = ({data}) => {
       },
       legend: {
         icon: 'rect',
-        itemWidth: 14,
+        itemWidth: 18,
         itemHeight: 5,
-        itemGap: 20,
-        right: '4%',
-        padding: [100, 10, 100, 0],
+        itemGap: 14,
+        left: '15%',
+        top: 60,
+        width: '80%',
         data: cities.map(city => city + '-预算收入')
-          .concat(cities.map(city => city + '-预算支出')),
-        orient: 'vertical',
+          .concat(cities.map(city => city + '-预算支出'),
+            cities.map(city => city + '-总预算')),
         textStyle: {
           fontSize: 12
         }
       },
       grid: {
-        left: '10%',
+        left: '12%',
         bottom: 70,
-        right: 200,
         containLabel: true
       },
       dataZoom: [
@@ -168,7 +187,6 @@ const FinanceComparisonChart = ({data}) => {
       xAxis: [
         {
           type: 'category',
-          boundaryGap: false,
           inverse: true,
           axisLine: {
             lineStyle: {
@@ -180,7 +198,7 @@ const FinanceComparisonChart = ({data}) => {
       yAxis: [
         {
           type: 'value',
-          name: '财政预算收支（亿元）',
+          name: '地方财政（亿元）',
           axisTick: {
             show: false
           },

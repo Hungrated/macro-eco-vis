@@ -1,19 +1,12 @@
 import React from 'react';
-import styles from '../../styles/OverviewChart.less';
+import styles from '../../styles/LocalOverviewChart.less';
 import ReactEcharts from 'echarts-for-react';
 
-const OverviewChart = ({data}) => {
+const LocalOverviewChart = ({data}) => {
 
   const getOption = () => {
 
-    const cities = [
-      '杭州',
-      '宁波',
-      '温州',
-      '嘉兴',
-      '绍兴',
-      '金华'
-    ];
+    const cities = ['宁波市区', '余姚市', '慈溪市', '奉化市', '象山县', '宁海县'];
 
     let dataMap = {};
 
@@ -58,7 +51,8 @@ const OverviewChart = ({data}) => {
       innerOptions.push({
         title: {
           text: yearIdx + '年浙江省部分城市经济指标',
-          left: 'center'
+          left: 'center',
+          top: 20
         },
         series: [
           {data: dataMap.dataGDP[yearIdx]},
@@ -123,7 +117,7 @@ const OverviewChart = ({data}) => {
             show: true,
             width: 20,
             yAxisIndex: [0],
-            right: 20,
+            right: 70,
             handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
             handleSize: '120%',
             handleStyle: {
@@ -141,7 +135,8 @@ const OverviewChart = ({data}) => {
         calculable: true,
         grid: {
           top: 80,
-          bottom: 100
+          bottom: 100,
+          left: '10%'
         },
         xAxis: [
           {
@@ -155,8 +150,7 @@ const OverviewChart = ({data}) => {
           {
             type: 'value',
             name: 'GDP（亿元）',
-            // max: 53500
-            max: 13000
+            max: 6500
           }
         ],
         series: [
@@ -199,6 +193,7 @@ const OverviewChart = ({data}) => {
         style={{
           minWidth: '550px',
           width: '100%',
+          marginLeft: '35px',
           height: 'calc(100vh - 100px)'
         }}
       />
@@ -206,6 +201,6 @@ const OverviewChart = ({data}) => {
   );
 };
 
-OverviewChart.propTypes = {};
+LocalOverviewChart.propTypes = {};
 
-export default OverviewChart;
+export default LocalOverviewChart;

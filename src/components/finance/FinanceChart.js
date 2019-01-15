@@ -45,7 +45,7 @@ const FinanceChart = ({data}) => {
 
     return {
       title: {
-        text: '2000年至2017年浙江省部分城市财政总收入比较',
+        text: '2000年至2017年浙江省部分城市财政总收入比较（亿元）',
         left: 'center',
         top: 10
       },
