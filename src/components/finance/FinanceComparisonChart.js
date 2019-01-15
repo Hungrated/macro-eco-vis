@@ -1,15 +1,16 @@
 import React from 'react';
-import styles from '../../styles/CitiesGDPChart.less';
+import styles from '../../styles/FinanceComparisonChart.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts/lib/echarts';
 
-const CitiesGDPChart = ({data}) => {
+const FinanceComparisonChart = ({data}) => {
 
-  const cityData = data.citiesGDP || {};
+  const citiesIncomeData = data.incomeFinance || {};
+
+  const citiesExpenseData = data.expenseFinance || {};
 
   const getOption = () => {
 
-    const cities = Object.keys(cityData);
     const years = [
       2017,
       2016,
@@ -29,18 +30,21 @@ const CitiesGDPChart = ({data}) => {
       2002,
       2001,
       2000];
+
+    let cities = Object.keys(citiesIncomeData);
     let xAxisDetailedData = years;
     let yAxisDetailedDataArr = [];
 
     cities.forEach(function (item) {
       yAxisDetailedDataArr.push({
-        name: item,
+        name: item + '-预算收入',
         type: 'line',
         smooth: true,
         symbol: 'none',
         lineStyle: {
           normal: {
-            width: 1
+            width: 2,
+            type: 'dashed',
           }
         },
         areaStyle: {
@@ -65,17 +69,53 @@ const CitiesGDPChart = ({data}) => {
               ')'
           }
         },
-        data: cityData[item].map(function (item) {
-          return item.value;
-        })
+        data: Object.values(citiesIncomeData[item] || {})
+      });
+    });
+
+    cities.forEach(function (item) {
+      yAxisDetailedDataArr.push({
+        name: item + '-预算支出',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        lineStyle: {
+          normal: {
+            width: 2
+          }
+        },
+        areaStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgba(0, 136, 212, 0.3)'
+              }, {
+                offset: 0.8,
+                color: 'rgba(0, 136, 212, 0)'
+              }], false),
+            shadowColor: 'rgba(0, 0, 0, 0.1)',
+            shadowBlur: 10
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: 'rgb(' + Math.round(Math.random() * 255) +
+              ',' + Math.round(Math.random() * 255) +
+              ',' + Math.round(Math.random() * 255) +
+              ')'
+          }
+        },
+        data: Object.values(citiesExpenseData[item] || {})
       });
     });
 
     return {
       title: {
-        text: '浙江省部分城市GDP趋势',
+        text: '2000年至2017年浙江省部分城市财政预算收入与支出趋势及比较',
+        subtext: '虚线代表预算收入 实线代表预算支出',
         left: 'center',
-        top: 20
+        top: 10
       },
       tooltip: {
         trigger: 'axis',
@@ -87,57 +127,60 @@ const CitiesGDPChart = ({data}) => {
       },
       legend: {
         icon: 'rect',
-        itemWidth: 10,
-        itemHeight: 8,
+        itemWidth: 14,
+        itemHeight: 5,
         itemGap: 20,
-        left: '15%',
-        top: '18%',
-        data: cities,
+        right: '4%',
+        padding: [100, 10, 100, 0],
+        data: cities.map(city => city + '-预算收入')
+          .concat(cities.map(city => city + '-预算支出')),
+        orient: 'vertical',
         textStyle: {
           fontSize: 12
         }
       },
       grid: {
-        left: '2%',
-        right: '5%',
-        bottom: '2%',
+        left: '10%',
+        bottom: 70,
+        right: 200,
         containLabel: true
       },
-      // dataZoom: [
-      //   {
-      //     show: true,
-      //     height: 25,
-      //     xAxisIndex: [0],
-      //     bottom: 30,
-      //     handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-      //     handleSize: '110%',
-      //     handleStyle: {
-      //       color: '#d3dee5'
-      //     },
-      //     borderColor: '#90979c'
-      //   },
-      //   {
-      //     type: 'inside',
-      //     show: true,
-      //     height: 35,
-      //     start: 1,
-      //     end: 35
-      //   }],
+      dataZoom: [
+        {
+          show: true,
+          height: 25,
+          xAxisIndex: [0],
+          bottom: 30,
+          handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+          handleSize: '110%',
+          handleStyle: {
+            color: '#d3dee5'
+          },
+          borderColor: '#90979c'
+        },
+        {
+          type: 'inside',
+          show: true,
+          height: 35,
+          start: 1,
+          end: 35
+        }],
       xAxis: [
         {
           type: 'category',
           boundaryGap: false,
+          inverse: true,
           axisLine: {
             lineStyle: {
               color: '#57617B'
             }
           },
-          inverse: true,
           data: xAxisDetailedData
         }],
       yAxis: [
         {
           type: 'value',
+          name: '财政预算收支（亿元）',
           axisTick: {
             show: false
           },
@@ -170,14 +213,14 @@ const CitiesGDPChart = ({data}) => {
         lazyUpdate={true}
         style={{
           width: '100%',
-          height: '100%',
-          minWidth: '450px'
+          height: 'calc(100vh - 70px)',
+          minHeight: '500px'
         }}
       />
     </div>
   );
 };
 
-CitiesGDPChart.propTypes = {};
+FinanceComparisonChart.propTypes = {};
 
-export default CitiesGDPChart;
+export default FinanceComparisonChart;

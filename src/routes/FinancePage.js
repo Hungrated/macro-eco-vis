@@ -4,7 +4,9 @@ import { connect } from 'dva';
 import 'antd/lib/button/style';
 import styles from '../styles/FinancePage.less';
 
-import ApplyChart from '../components/finance/ApplyChart';
+import FinanceChart from '../components/finance/FinanceChart';
+import FinanceComparisonChart
+  from '../components/finance/FinanceComparisonChart';
 
 const mapStateToProps = ({finance}) => ({
   finance
@@ -50,29 +52,16 @@ class FinancePage extends PureComponent {
             <Button className={styles['m-button']}
                     type="primary" onClick={() => {
               this.changeChart(0);
-            }}>申请量</Button><br/>
+            }}>财政趋势</Button><br/>
             <Button className={styles['m-button']}
                     type="primary" onClick={() => {
               this.changeChart(1);
-            }}>申请密度</Button><br/>
-            <Button className={styles['m-button']}
-                    type="primary" onClick={() => {
-              this.changeChart(2);
-            }}>省 份</Button><br/>
-            <Button className={styles['m-button']}
-                    type="primary" onClick={() => {
-              this.changeChart(3);
-            }}>研发人</Button>
+            }}>预算收支</Button>
           </div>
           {
             this.state.chartNum === 0
-              ? (<ApplyChart data={data}/>)
-              : (this.state.chartNum === 1
-                ? (<div>0</div>)
-                : (this.state.chartNum === 2
-                  ? (<div>0</div>)
-                  : (<div>0</div>))
-              )
+              ? (<FinanceChart data={data}/>)
+              : (<FinanceComparisonChart data={data}/>)
           }
         </div>
       )
