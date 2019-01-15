@@ -50,7 +50,7 @@ const LocalOverviewChart = ({data}) => {
       let yearIdx = i.toString();
       innerOptions.push({
         title: {
-          text: yearIdx + '年浙江省部分城市经济指标',
+          text: yearIdx + '年宁波市下属区县市经济指标',
           left: 'center',
           top: 20
         },
